@@ -647,6 +647,7 @@ header, #dialogBox, #timeline{
 #userControl{
     text-shadow:1px 1px 5px #222;
 }
+#logout:hover{color:red;text-shadow:0 0 20px rgba(255,0,0,.5), 1px 0 black;}
 #dialogBox{
     background:url(../img/TEST_0000s_0005_Shape-23.png) no-repeat; 
     height:210px;
@@ -692,7 +693,7 @@ header, #dialogBox, #timeline{
 .p1logo{background:url(../img/TEST_0000s_0001_menu-P1-logo.png);height:25px;width:33px;}
 .clear{clear:both;}
 .white{color:white;}
-.button{padding:5px 35px;background:black;color:#eee;border-radius:5px;font-size:13px;}
+.button{padding:4px 35px;background:black;color:#eee;border-radius:5px;font-size:13px;border:none;}
 .button:hover{-moz-transform:translateZ(1px);}
-.buttonShare{background:url(../img/TEST_0000s_0001s_0003_share-button-copy.png);}
+.buttonShare{background:url(../img/TEST_0000s_0001s_0003_share-button-copy.png) no-repeat;}
 
