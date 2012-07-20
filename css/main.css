@@ -66,14 +66,16 @@ button,
 input,
 select,
 textarea {
-    font-family: sans-serif;
-    color: #222;
+    font-family: Arial;
+    color: #999;
 }
 
 body {
     margin: 0;
     font-size: 1em;
     line-height: 1.4;
+    background:url(../img/TEST_0000_Background-texture-fade.png) repeat-x; 
+
 }
 
 /*
@@ -98,8 +100,12 @@ body {
    ========================================================================== */
 
 a {
-    color: #00e;
-}
+    color: #aaa;
+    text-decoration:none;
+    -moz-transition:color 1s ease;
+    -webkit-transition:color 1s ease;
+    -o-transition:color 1s ease;
+ }
 
 a:visited {
     color: #551a8b;
@@ -120,6 +126,7 @@ a:focus {
 a:hover,
 a:active {
     outline: 0;
+
 }
 
 
@@ -620,3 +627,29 @@ td {
         page-break-after: avoid;
     }
 }
+
+
+/* custom for p1 */
+header{
+    border-bottom:1px solid rgba(0,0,0,.6);
+    padding:5px 0 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.1);
+}
+
+
+#wrap{
+    width:600px;
+    display:block;
+    margin:50px auto;
+    padding:5px;
+}
+#userControl{
+    text-shadow:1px 1px 5px #222;
+}
+#dialogBox
+
+/*generic*/
+.left{float:left;}
+.right{float:right;}
+.p1logo{background:url(../img/TEST_0000s_0001_menu-P1-logo.png);height:25px;width:33px;}
+.clear{clear:both;}
