@@ -72,9 +72,9 @@ textarea {
 
 body {
     margin: 0;
-    font-size: 1em;
+    font-size: 14px;
     line-height: 1.4;
-    background:url(../img/TEST_0000_Background-texture-fade.png) repeat-x; 
+    background:url(../img/TEST_0000_Background-texture-fade.png) ; 
 
 }
 
@@ -100,7 +100,7 @@ body {
    ========================================================================== */
 
 a {
-    color: #aaa;
+    color: #ddd;
     text-decoration:none;
     -moz-transition:color 1s ease;
     -webkit-transition:color 1s ease;
@@ -631,7 +631,7 @@ td {
 
 /* custom for p1 */
 #wrap{
-    width:600px;
+    width:550px;
     display:block;
     margin:50px auto;
     padding:5px;
@@ -639,7 +639,7 @@ td {
 header{
     padding:5px 0 20px;
 }
-header, #dialogBox, #timeline{
+header, #dialogBox, #timeline:not(:last-child){
     border-bottom:1px solid rgba(0,0,0,.6);
      box-shadow:0 1px 0 rgba(255,255,255,.1);
 }
@@ -684,8 +684,46 @@ header, #dialogBox, #timeline{
 #dialogBox #whitePart #bottomMenu a:not(:first-child){
     margin-left:30px;
 }
-#timeline .picture{5px 0 5px 15px;width:55px;height:auto;}
-#timeline .content{width:520px;}
+#timeline{margin: 10px 10px 10px 0;padding: 0 0 10px 10px;}
+#timeline .picture{width:10%;height:auto;cursor:pointer;}
+#timeline .picture img{width:55px;height:auto;}
+#timeline .content{width:89%;}
+#timeline .username, #timeline .activity{display:inline-block;}
+#timeline .username{color:#ddd;}
+.date{margin:5px 0;}
+.date label{margin:0 10px;}
+#profilePictures{
+	background:url(../img/TEST_0001s_0000s_0003_shared-item-bg.png) no-repeat;
+	opacity:0;
+	-moz-transition:all 2s ease;
+	-o-transition:all 2s ease;
+	-webkit-transition:all 2s ease;
+	transition:all 2s ease;
+	height:0;
+	overflow:hidden;
+	width:465px;
+}
+#profilePictures .left, #profilePictures .right{
+	padding:50px 7px;
+	cursor:pointer;
+}
+#profilePictures #picWrapper{
+	display:inline-block;
+	overflow:hidden;
+	width:400px;
+}
+#profilePictures #picWrapper .pictures{
+	-webkit-transition:all 1s ease;
+	-moz-transition:all 1s ease;
+	-o-transition:all 1s ease;
+	transition:all 1s ease;
+	left:0;
+}
+#profilePictures #picWrapper .pictures img{
+	width:70px;
+	height:75px;
+	margin:25px 5px;
+}
 
 
 /*generic*/
