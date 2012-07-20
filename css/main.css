@@ -684,7 +684,8 @@ header, #dialogBox, #timeline{
 #dialogBox #whitePart #bottomMenu a:not(:first-child){
     margin-left:30px;
 }
-#timeline .picture{margin:5px 15px;width:55px;height:auto;}
+#timeline .picture{5px 0 5px 15px;width:55px;height:auto;}
+#timeline .content{width:520px;}
 
 
 /*generic*/
