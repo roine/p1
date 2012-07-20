@@ -1,5 +1,5 @@
 /* Author: Jonathan de Montalembert
-Date: 2012.07.20
+** Date: 2012.07.20
 */
 
 box = 	"<div id='profilePictures'>"+
@@ -9,6 +9,7 @@ box = 	"<div id='profilePictures'>"+
 		"</div>";
 
 $(document).ready(function(){
+	
 		// Add the box for svante
 		$("#timeline .picture.active")
 		.parent()
@@ -77,5 +78,5 @@ fetchGoogleImages = function(that, use){
 			$(that).parent().find("#profilePictures .pictures").html(pics);
 			
 		}
-	})
+	});
 }

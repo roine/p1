@@ -687,7 +687,7 @@ header, #dialogBox, #timeline:not(:last-child){
 #timeline{margin: 10px 10px 10px 0;padding: 0 0 10px 10px;}
 #timeline .picture{width:10%;height:auto;cursor:pointer;}
 #timeline .picture img{width:55px;height:auto;}
-#timeline .content{width:89%;}
+#timeline .content{width:87%;}
 #timeline .username, #timeline .activity{display:inline-block;}
 #timeline .username{color:#ddd;}
 .date{margin:5px 0;}
