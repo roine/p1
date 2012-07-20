@@ -630,26 +630,69 @@ td {
 
 
 /* custom for p1 */
-header{
-    border-bottom:1px solid rgba(0,0,0,.6);
-    padding:5px 0 20px;
-    box-shadow:0 1px 0 rgba(255,255,255,.1);
-}
-
-
 #wrap{
     width:600px;
     display:block;
     margin:50px auto;
     padding:5px;
 }
+header{
+    padding:5px 0 20px;
+}
+header, #dialogBox, #timeline{
+    border-bottom:1px solid rgba(0,0,0,.6);
+     box-shadow:0 1px 0 rgba(255,255,255,.1);
+}
+
 #userControl{
     text-shadow:1px 1px 5px #222;
 }
-#dialogBox
+#dialogBox{
+    background:url(../img/TEST_0000s_0005_Shape-23.png) no-repeat; 
+    height:210px;
+    padding:55px 55px 0 55px;
+}
+#dialogBox #whitePart{
+    background:url(../img/TEST_0000s_0004_Shape-24.png) no-repeat;
+    padding:10px;
+    margin-top:5px;
+}
+#dialogBox #whitePart textarea{
+    display:block;
+    height:75px;
+    width:410px;
+    padding:5px;
+    resize:none;
+    border-radius:4px 4px 2px 2px;
+    border:1px solid #aaa;
+    box-shadow:0 1px 0 rgba(0, 0, 0, 0.5) inset;
+}
+#dialogBox #whitePart #bottomMenu{
+    width:415px;
+    height:30px;
+    margin:5px 0 5px 5px;
+}
+#dialogBox #whitePart #bottomMenu a label{
+    margin-left:10px;
+    font-size:12px;
+}
+#dialogBox #whitePart #bottomMenu a.active, #dialogBox #whitePart #bottomMenu a.active label{
+    color:#222;
+    cursor:default !important;
+}
+#dialogBox #whitePart #bottomMenu a:not(:first-child){
+    margin-left:30px;
+}
+#timeline .picture{margin:5px 15px;width:55px;height:auto;}
+
 
 /*generic*/
 .left{float:left;}
 .right{float:right;}
 .p1logo{background:url(../img/TEST_0000s_0001_menu-P1-logo.png);height:25px;width:33px;}
 .clear{clear:both;}
+.white{color:white;}
+.button{padding:5px 35px;background:black;color:#eee;border-radius:5px;font-size:13px;}
+.button:hover{-moz-transform:translateZ(1px);}
+.buttonShare{background:url(../img/TEST_0000s_0001s_0003_share-button-copy.png);}
+
