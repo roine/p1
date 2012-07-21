@@ -14,6 +14,7 @@ box = 	"<div id='profilePictures'>"+
 **	On page loaded
 */
 $(document).ready(function(){
+	
 		// Add the box for svante
 		$("#timeline .picture.active")
 		.parent()
@@ -47,6 +48,8 @@ $(document).ready(function(){
 				}
 				return;
 			}
+			
+			
 });
 
 
@@ -63,7 +66,7 @@ $("#dialogBox #whitePart textarea").focus(function(){
 
 
 // picture Box handler
-$("#timeline .picture").click(function(){
+$("#timeline .picture").live("click", function(){
 	if(!$(this).is(".active")){
 		user = $(this).attr("data-name");
 		that = $(this);
@@ -102,6 +105,8 @@ $("#form").submit(function(e){
 			saveMessageToDB(userId, message);
 			clearTextarea(el);
 			displayMessage(userId, message);
+			tHeight = $("#timeline:last-child").height()
+			$("#timeline:eq(0)").animate({height:tHeight}, "slow")
 		}
 		else
 		console.log("nope")
@@ -168,12 +173,9 @@ createTables = function(db){
 feedDataHandler = function(transaction, results) {
 	var string = "";
 	    for (var i=0; i<results.rows.length; i++) {
-	        // Each row is a standard JavaScript array indexed by
-	        // column names.
 	        var row = results.rows.item(i);
-	        string = string + row['username'] + " (message "+row['message']+")\n";
+			displayMessage(row["user_id"], row["message"], row["created_at"]);
 	    }
-	    console.log(string);
 };
 
 nullDataHandler = dataHandler = function(transaction, results) {
@@ -209,19 +211,28 @@ saveMessageToDB = function(userId, message){
 };
 
 displayMessage = function(userId, message, date){
-	var date = date || new Date().getTime();
-	humanDate = 
-	timeline = 	"<div id='timeline'>"+
+	// if there is a date defined then the datas come from the local DB
+	var fromDB = date || false;
+	var date = new Date(date) || new Date().getTime();
+	
+ 	var humanDate = $.cuteTime(date);
+
+	// console.log(humanDate)
+	timeline = 	"<div id='timeline' class='fresh'>"+
 	            "<div class='picture left' data-name='naim boughazi'><img src='img/TEST_0001s_0000s_0007_Layer-64-copy.png'></div>"+
 	            "<div class='content right'>"+
 					"<div class='username'><a href='#'>Naim Boughazi</a></div>&nbsp;"+
 					"<div class='activity'>"+message+"</div>"+
-					"<div class='date message'><img src='img/TEST_0001s_0003s_0003_Speech-Bubbles-2.png'>&nbsp;<label>"+date+"<label></div>"+
+					"<div class='date message'><img src='img/TEST_0001s_0003s_0003_Speech-Bubbles-2.png'>&nbsp;<label id='custom'>"+date+"<label></div>"+
 				"</div>"+
 				"<div class='clear'></div>"+
 	        "</div>";
-	$("#timelineWrapper").prepend(timeline)
+	$("#timelineWrapper").prepend(timeline);
+	$("#timeline .message label#custom").cuteTime();
+	if(fromDB)
+		$("#timeline").removeClass("fresh")
 }
+
 
 clearTextarea = function(el){
 	$(el).val("")

@@ -724,7 +724,9 @@ header, #dialogBox, #timeline:not(:last-child){
 	height:75px;
 	margin:25px 5px;
 }
-
+#timeline.fresh{
+	height:0;
+}
 
 /*generic*/
 .left{float:left;}
