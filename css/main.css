@@ -690,6 +690,9 @@ header, #dialogBox, #timeline:not(:last-child){
 #dialogBox #whitePart #bottomMenu a:hover{
     color:#222;
 }
+#timelineWrapper{
+	overflow:hidden;
+}
 #timeline{
     -webkit-transition:all .5s ease;
     -moz-transition:all .5s ease;
@@ -701,6 +704,7 @@ header, #dialogBox, #timeline:not(:last-child){
 #timeline .picture img{width:55px;height:auto;}
 #timeline .content{width:87%;}
 #timeline .username, #timeline .activity{display:inline-block;}
+#timeline .activity textarea{resize:none;}
 #timeline .username{color:#ddd;}
 #timeline .udControl{
     display:none;
@@ -759,5 +763,6 @@ header, #dialogBox, #timeline:not(:last-child){
 .button{padding:4px 35px;background:black;color:#eee;border-radius:5px;font-size:13px;border:none;}
 .button:active{-moz-transform:translateZ(1px);-webkit-transform:translateZ(1px);}
 .buttonShare{background:url(../img/TEST_0000s_0001s_0003_share-button-copy.png) no-repeat;}
-.edit:hover{color:#BADA55;} /* just because it's a badass color */
-.delete:hover{color:#ff1111;}
+.edit:hover, .save:hover;{color:#BADA55;} /* just because it's a badass color */
+.delete:hover, .cancel:hover;{color:#ff1111;}
+

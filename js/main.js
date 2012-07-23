@@ -128,8 +128,16 @@ $("#timeline").live("mouseover", function(){
 // Event click for edting message
 $(".udControl .edit").live("click", function(e){
 	e.preventDefault();
+	var timeline = $(this).parent().parent().parent();
+	var messageId = $(timeline).attr("data-messageId");
+	wildBoxAppear(timeline)
 });
 
+$(".udControl .cancel").live("click", function(e){
+	e.preventDefault();
+	var timeline = $(this).parent().parent().parent();
+	toggleButton(timeline);
+});
 // Event click for deleting message
 $(".udControl .delete").live("click", function(e){
 	e.preventDefault();
@@ -138,7 +146,7 @@ $(".udControl .delete").live("click", function(e){
 	var finishHim = confirm("Sure? It's a VERY cool awesome message.");
 	if(finishHim)
 		deleteMessage(timeline, messageId);
-})
+});
 
 
 
@@ -286,7 +294,7 @@ deleteMessageInDB = function(id){
 displayMessage = function(row){
 	// if there is a date defined then the datas come from the local DB
 	var fromDB = row['created_at'] || false;
-	var date = new Date(row['created_at']) || new Date().getTime();
+	var date = row['created_at'] ? new Date(row['created_at']) : new Date().getTime();
 	
  	var humanDate = $.cuteTime(date);
 	timeline = 	"<div id='timeline' class='fresh' data-messageId='"+row["id"]+"'>"+
@@ -307,7 +315,7 @@ displayMessage = function(row){
 
 
 clearTextarea = function(el){
-	$(el).val("")
+	$(el).val("");
 }
 
 
@@ -317,5 +325,24 @@ deleteMessage = function(el, id){
 	setTimeout(function(){$(el).css("display", "none")}, 500); // 500ms is the transition for scaling
 	
 	// DB process
-	deleteMessageInDB(id)
+	deleteMessageInDB(id);
 }
+
+wildBoxAppear = function(el){
+	width=$(el).innerWidth();
+	height=$(el).innerHeight();
+	defaultText = $(el).find(".activity").text();
+	$(el).find(".activity").html("<textarea>"+defaultText+"</textarea>");
+	toggleButton(el);
+};
+
+toggleButton = function(el){
+if($(el).find(".save")[0]){
+	console.log($(el).find(".udControl").empty());
+	$(el).find(".udControl").html("<a class='edit'>Edit</a><a class='delete'>X</a>")
+}
+if($(el).find(".edit")[0]){
+	$(el).find(".udControl").empty();
+	$(el).find(".udControl").html("<a class='save'>Save</a><a class='cancel'>Cancel</a>")
+}		
+};
