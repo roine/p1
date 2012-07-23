@@ -9,7 +9,7 @@ box = 	"<div id='profilePictures'>"+
 		"</div>";
 		
 
-
+var messageId = "";
 /*
 **	On page loaded
 */
@@ -31,7 +31,7 @@ $(document).ready(function(){
 			$("#dialogBox #whitePart textarea").css({"color":"black"});
 			
 			var db = null;
-
+			// Check whether support openDatabase
 			try {
 			    if (!window.openDatabase) {
 			        alert(' openDatabase not supported please use webkit');
@@ -104,9 +104,8 @@ $("#form").submit(function(e){
 	userId = $("body").attr("data-userId");
 	if(message.length > 0){
 		if(window.openDatabase) {
-			saveMessageToDB(userId, message);
+			row = saveMessageToDB(userId, message);
 			clearTextarea(el);
-			displayMessage(userId, message);
 			tHeight = $("#timeline:last-child").height();
 			$("#timeline:eq(0)").animate({height:tHeight}, "slow");
 		}
@@ -133,9 +132,10 @@ $(".udControl .edit").live("click", function(e){
 $(".udControl .delete").live("click", function(e){
 	e.preventDefault();
 	var timeline = $(this).parent().parent().parent();
+	var messageId = $(timeline).attr("data-messageid");
 	var finishHim = confirm("Sure? It's a VERY cool awesome message.");
 	if(finishHim)
-		deleteMessage(timeline);
+		deleteMessage(timeline, messageId);
 })
 
 
@@ -202,12 +202,19 @@ createTables = function(db){
 
 // Extract the rows
 feedDataHandler = function(transaction, results) {
-	var string = "";
 	    for (var i=0; i<results.rows.length; i++) {
 	        var row = results.rows.item(i);
-			displayMessage(row["user_id"], row["message"], row["created_at"]);
+			displayMessage(row);
 	    }
 };
+
+idDataHandler = function(transaction, results) {
+for (var i=0; i<results.rows.length; i++) {
+	        var row = results.rows.item(i);
+	    }
+	    displayMessage(row)
+};
+
 
 nullDataHandler = dataHandler = function(transaction, results) {
 }
@@ -221,7 +228,7 @@ errorHandler = function(transaction, error){
 // Get the feeds from the database
 getData = function(db){
 	db.transaction(function (transaction) {
-	        transaction.executeSql("SELECT * from feeds;",
+	        transaction.executeSql("SELECT * FROM feeds;",
 	            [],
 	            feedDataHandler, errorHandler);
 	    });
@@ -244,19 +251,27 @@ saveMessageToDB = function(userId, message){
 	});
 };
 
-displayMessage = function(userId, message, date){
+lastMessage = function(){
+	db.transaction(function (transaction) {
+		transaction.executeSql("SELECT * FROM feeds;", 
+							[],
+		                    idDataHandler, errorHandler);
+	});
+}
+
+
+displayMessage = function(row){
 	// if there is a date defined then the datas come from the local DB
-	var fromDB = date || false;
-	var date = new Date(date) || new Date().getTime();
+	var fromDB = row['created_at'] || false;
+	var date = new Date(row['created_at']) || new Date().getTime();
 	
  	var humanDate = $.cuteTime(date);
-
-	timeline = 	"<div id='timeline' class='fresh'>"+
+	timeline = 	"<div id='timeline' class='fresh' data-messageid='"+row["id"]+"'>"+
 	            "<div class='picture left' data-name='naim boughazi'><img src='img/TEST_0001s_0000s_0007_Layer-64-copy.png'></div>"+
 	            "<div class='content right'>"+
 	            "<div class='udControl right'><a class='edit'>edit</a><a class='delete'>X</a></div>"+
 					"<div class='username'><a href='#'>Naim Boughazi</a></div>&nbsp;"+
-					"<div class='activity'>"+message+"</div>"+
+					"<div class='activity'>"+row['message']+"</div>"+
 					"<div class='date message'><img src='img/TEST_0001s_0003s_0003_Speech-Bubbles-2.png'>&nbsp;<label id='custom'>"+date+"<label></div>"+
 				"</div>"+
 				"<div class='clear'></div>"+
@@ -273,7 +288,9 @@ clearTextarea = function(el){
 }
 
 
-deleteMessage = function(el){
+deleteMessage = function(el, id){
+	// UI process
 	$(el).css({"-moz-transform":"scale(0)", "-webkit-transform":"scale(0)", "-o-transform":"scale(0)", "transform":"scale(0)"});
 	setTimeout(function(){$(el).css("display", "none")}, 500); // 500ms is the transition for scaling
+	// database process
 }
