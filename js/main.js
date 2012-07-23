@@ -107,9 +107,8 @@ $("#form").submit(function(e){
 			saveMessageToDB(userId, message);
 			clearTextarea(el);
 			row = getLastRow()
-			displayMessage(row)
-			tHeight = $("#timeline:last-child").height();
-			$("#timeline:eq(0)").animate({height:tHeight}, "slow");
+			console.log(row)
+			displayMessage(row, "slide")
 		}
 		else
 		console.log("nope");
@@ -291,10 +290,11 @@ deleteMessageInDB = function(id){
 	});
 };
 
-displayMessage = function(row){
+displayMessage = function(row, slide){
 	// if there is a date defined then the datas come from the local DB
-	var fromDB = row['created_at'] || false;
-	var date = row['created_at'] ? new Date(row['created_at']) : new Date().getTime();
+
+	
+	var date = new Date(row["created_at"]) || new Date().getTime();
 	
  	var humanDate = $.cuteTime(date);
 	timeline = 	"<div id='timeline' class='fresh' data-messageId='"+row["id"]+"'>"+
@@ -309,8 +309,12 @@ displayMessage = function(row){
 	        "</div>";
 	$("#timelineWrapper").prepend(timeline);
 	$("#timeline .message label#custom").cuteTime();
-	if(fromDB)
-		$("#timeline").removeClass("fresh")
+	
+	if(!slide)
+		$("#timeline").removeClass("fresh");
+	else{
+		var tHeight = $("#timeline:last-child").height();
+		$("#timeline:eq(0)").animate({height:tHeight}, "slow");}
 }
 
 
@@ -338,7 +342,7 @@ wildBoxAppear = function(el){
 
 toggleButton = function(el){
 if($(el).find(".save")[0]){
-	console.log($(el).find(".udControl").empty());
+	$(el).find(".udControl").empty();
 	$(el).find(".udControl").html("<a class='edit'>Edit</a><a class='delete'>X</a>")
 }
 if($(el).find(".edit")[0]){
