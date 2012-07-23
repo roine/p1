@@ -684,12 +684,34 @@ header, #dialogBox, #timeline:not(:last-child){
 #dialogBox #whitePart #bottomMenu a:not(:first-child){
     margin-left:30px;
 }
-#timeline{margin: 10px 10px 10px 0;padding: 0 0 10px 10px;}
+#dialogBox #whitePart #bottomMenu a{
+    color:#888;
+}
+#dialogBox #whitePart #bottomMenu a:hover{
+    color:#222;
+}
+#timeline{
+    -webkit-transition:all .5s ease;
+    -moz-transition:all .5s ease;
+    -o-transition:all .5s ease;
+    transition:all .5s ease;
+    padding: 10px 0 10px 10px;
+}
 #timeline .picture{width:10%;height:auto;cursor:pointer;}
 #timeline .picture img{width:55px;height:auto;}
 #timeline .content{width:87%;}
 #timeline .username, #timeline .activity{display:inline-block;}
 #timeline .username{color:#ddd;}
+#timeline .udControl{
+    display:none;
+}
+#timeline .udControl a{
+    padding:4px;
+    background:rgba(255,255,255,.2);
+    border-radius:2px;
+    margin:0 5px;
+    cursor:pointer;
+}
 .date{margin:5px 0;}
 .date label{margin:0 10px;}
 #profilePictures{
@@ -735,6 +757,7 @@ header, #dialogBox, #timeline:not(:last-child){
 .clear{clear:both;}
 .white{color:white;}
 .button{padding:4px 35px;background:black;color:#eee;border-radius:5px;font-size:13px;border:none;}
-.button:hover{-moz-transform:translateZ(1px);}
+.button:active{-moz-transform:translateZ(1px);-webkit-transform:translateZ(1px);}
 .buttonShare{background:url(../img/TEST_0000s_0001s_0003_share-button-copy.png) no-repeat;}
-
+.edit:hover{color:#BADA55;} /* just because it's a badass color */
+.delete:hover{color:#ff1111;}

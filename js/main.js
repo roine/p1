@@ -15,11 +15,12 @@ box = 	"<div id='profilePictures'>"+
 */
 $(document).ready(function(){
 	
-		// Add the box for svante
+		// Open the box for svante
 		$("#timeline .picture.active")
 		.parent()
 		.append(box);
 		
+		// open the box and load the google images
 		$("#profilePictures").css({"height":115, "opacity":1});
 			that = $("#timeline .picture.active");
 			user = $(that).attr("data-name");
@@ -35,7 +36,6 @@ $(document).ready(function(){
 			    if (!window.openDatabase) {
 			        alert(' openDatabase not supported please use webkit');
 			    } else {
-				
 				window.db = db = openDatabase("Wall", "0.1", "P1 Wall", 50000);
 				createTables(db);
 				getData(db);	
@@ -56,7 +56,7 @@ $(document).ready(function(){
 /*
 ** Event Handlers
 */
-// color for textarea
+// Event focus for text color in textarea
 $("#dialogBox #whitePart textarea").focus(function(){
 	$(this).css({"color":"black"});
 }).blur(function(){
@@ -65,7 +65,7 @@ $("#dialogBox #whitePart textarea").focus(function(){
 });
 
 
-// picture Box handler
+// Event click picture Box
 $("#timeline .picture").live("click", function(){
 	if(!$(this).is(".active")){
 		user = $(this).attr("data-name");
@@ -82,19 +82,21 @@ $("#timeline .picture").live("click", function(){
 	}
 });
 
-//arrows nav
+// Event Click arrows nav
 $("#profilePictures .left").live("click", function(){
 	var pos = parseInt($(this).parent().find(".pictures").css("left"));
 	if(Math.abs(pos) < 80*7-390)
 		$(this).parent().find(".pictures").css({"left":pos-80});
 });
+
+// Event Click arrows nav
 $("#profilePictures .right").live("click", function(){
 	var pos = parseInt($(this).parent().find(".pictures").css("left"));
 	if(Math.abs(pos) > 0)
 		$(this).parent().find(".pictures").css({"left":pos+80});
 });
 
-// submit feed
+// Event submit feed
 $("#form").submit(function(e){
 	e.preventDefault();
 	var message = $(this).find("textarea").val(),
@@ -105,13 +107,38 @@ $("#form").submit(function(e){
 			saveMessageToDB(userId, message);
 			clearTextarea(el);
 			displayMessage(userId, message);
-			tHeight = $("#timeline:last-child").height()
-			$("#timeline:eq(0)").animate({height:tHeight}, "slow")
+			tHeight = $("#timeline:last-child").height();
+			$("#timeline:eq(0)").animate({height:tHeight}, "slow");
 		}
 		else
-		console.log("nope")
+		console.log("nope");
 	}
+});
+
+// Event mouse hover and out for background and displaying the UD control
+$("#timeline").live("mouseover", function(){
+	$(this).css({"background":"rgba(255,255,255,.1)"})
+		.find(".udControl").css({"display":"block"})
+}).live("mouseout", function(){
+	$(this).css({"background":"none"})
+		.find(".udControl").css({"display":"none"})
+});
+
+// Event click for edting message
+$(".udControl .edit").live("click", function(e){
+	e.preventDefault();
+});
+
+// Event click for deleting message
+$(".udControl .delete").live("click", function(e){
+	e.preventDefault();
+	var timeline = $(this).parent().parent().parent();
+	var finishHim = confirm("Sure? It's a VERY cool awesome message.");
+	if(finishHim)
+		deleteMessage(timeline);
 })
+
+
 
 
 
@@ -137,12 +164,16 @@ fetchGoogleImages = function(that, user){
 // 			{"id":"1", "username":"Yu Wang", "user_id":"4", "message":"made that whole thing happen.", created_at:1195629045},
 // 			{"id":"2032", "username":"Mikael Gustavsson", "user_id":"3", "message":"is writing a bunch of PHP, I guess.", created_at:1292915445}
 // ];
+
+// Json with the list of user and some informations
 var userJson = [
 			{"id":1, "username":"Svante Jerling", "picture":"img/TEST_0001s_0000s_0006_Layer-65.png"}, 
 			{"id":2, "username":"Naim Boughazi", "picture":"img/TEST_0001s_0000s_0007_Layer-64-copy.png"},
 			{"id":3, "username":"Mikael Gustavsson", "picture":"img/TEST_0001s_0001s_0003_Layer-66.png"},
 			{"id":4, "username":"Yu Wang", "picture":"img/TEST_0001s_0001s_0002_Layer-71.png"}
 ];
+
+// create tables feeds, and users if not existing
 createTables = function(db){
 	db.transaction(function (transaction) { 
 		transaction.executeSql('CREATE TABLE IF NOT EXISTS feeds(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL, user_id INTEGER NOT NULL, message TEXT NOT_NULL, created_at TIMESTAMP);', 
@@ -169,7 +200,7 @@ createTables = function(db){
 			});
 };
 
-
+// Extract the rows
 feedDataHandler = function(transaction, results) {
 	var string = "";
 	    for (var i=0; i<results.rows.length; i++) {
@@ -181,11 +212,13 @@ feedDataHandler = function(transaction, results) {
 nullDataHandler = dataHandler = function(transaction, results) {
 }
 
+// Display the error message into the console
 errorHandler = function(transaction, error){
     console.log('Error: '+error.message+' (Code '+error.code+')');
     return false;
 };
 
+// Get the feeds from the database
 getData = function(db){
 	db.transaction(function (transaction) {
 	        transaction.executeSql("SELECT * from feeds;",
@@ -194,6 +227,7 @@ getData = function(db){
 	    });
 };
 
+// droptable can be call in console from the browser ex: dropTable(db, "user") will drop the user table
 window.dropTable = dropTable = function(db, table){
 	db.transaction(function (transaction) {
 		transaction.executeSql("DROP TABLE "+table+";", 
@@ -217,10 +251,10 @@ displayMessage = function(userId, message, date){
 	
  	var humanDate = $.cuteTime(date);
 
-	// console.log(humanDate)
 	timeline = 	"<div id='timeline' class='fresh'>"+
 	            "<div class='picture left' data-name='naim boughazi'><img src='img/TEST_0001s_0000s_0007_Layer-64-copy.png'></div>"+
 	            "<div class='content right'>"+
+	            "<div class='udControl right'><a class='edit'>edit</a><a class='delete'>X</a></div>"+
 					"<div class='username'><a href='#'>Naim Boughazi</a></div>&nbsp;"+
 					"<div class='activity'>"+message+"</div>"+
 					"<div class='date message'><img src='img/TEST_0001s_0003s_0003_Speech-Bubbles-2.png'>&nbsp;<label id='custom'>"+date+"<label></div>"+
@@ -236,4 +270,10 @@ displayMessage = function(userId, message, date){
 
 clearTextarea = function(el){
 	$(el).val("")
+}
+
+
+deleteMessage = function(el){
+	$(el).css({"-moz-transform":"scale(0)", "-webkit-transform":"scale(0)", "-o-transform":"scale(0)", "transform":"scale(0)"});
+	setTimeout(function(){$(el).css("display", "none")}, 500); // 500ms is the transition for scaling
 }
