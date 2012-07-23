@@ -106,6 +106,8 @@ $("#form").submit(function(e){
 		if(window.openDatabase) {
 			row = saveMessageToDB(userId, message);
 			clearTextarea(el);
+			id = lastMessageId()
+			displayMessage(row)
 			tHeight = $("#timeline:last-child").height();
 			$("#timeline:eq(0)").animate({height:tHeight}, "slow");
 		}
@@ -132,10 +134,9 @@ $(".udControl .edit").live("click", function(e){
 $(".udControl .delete").live("click", function(e){
 	e.preventDefault();
 	var timeline = $(this).parent().parent().parent();
-	var messageId = $(timeline).attr("data-messageid");
 	var finishHim = confirm("Sure? It's a VERY cool awesome message.");
 	if(finishHim)
-		deleteMessage(timeline, messageId);
+		deleteMessage(timeline);
 })
 
 
@@ -208,6 +209,13 @@ feedDataHandler = function(transaction, results) {
 	    }
 };
 
+idDataHandler = function(transaction, results) {
+for (var i=0; i<results.rows.length; i++) {
+	        var row = results.rows.item(i);
+	    }
+	    console.log(row)
+};
+
 
 nullDataHandler = dataHandler = function(transaction, results) {
 }
@@ -242,7 +250,16 @@ saveMessageToDB = function(userId, message){
 							[userJson[userId-1].username, userId, message, new Date().getTime()],
 		                    nullDataHandler, errorHandler);
 	});
+	return {username:userJson[userId-1].username, user_id:userId, message:message, created_at:new Date().getTime()};
 };
+
+lastMessageId = function(){
+	db.transaction(function (transaction) {
+		transaction.executeSql("SELECT * FROM feeds;", 
+							[],
+		                    idDataHandler, errorHandler);
+	});
+}
 
 
 displayMessage = function(row){
@@ -251,7 +268,7 @@ displayMessage = function(row){
 	var date = new Date(row['created_at']) || new Date().getTime();
 	
  	var humanDate = $.cuteTime(date);
-	timeline = 	"<div id='timeline' class='fresh' data-messageid='"+row["id"]+"'>"+
+	timeline = 	"<div id='timeline' class='fresh' data-messageId='"+row["id"]+"'>"+
 	            "<div class='picture left' data-name='naim boughazi'><img src='img/TEST_0001s_0000s_0007_Layer-64-copy.png'></div>"+
 	            "<div class='content right'>"+
 	            "<div class='udControl right'><a class='edit'>edit</a><a class='delete'>X</a></div>"+
@@ -273,19 +290,7 @@ clearTextarea = function(el){
 }
 
 
-deleteMessage = function(el, id){
-	// UI process
+deleteMessage = function(el){
 	$(el).css({"-moz-transform":"scale(0)", "-webkit-transform":"scale(0)", "-o-transform":"scale(0)", "transform":"scale(0)"});
 	setTimeout(function(){$(el).css("display", "none")}, 500); // 500ms is the transition for scaling
-
-	// database process
-	deleteMessageInDB(id);
-};
-
-deleteMessageInDB = function(id){
-		db.transaction(function (transaction) {
-		transaction.executeSql("DELETE FROM feeds WHERE id=?;", 
-			[id],
-		     nullDataHandler, errorHandler);
-	});
 }
