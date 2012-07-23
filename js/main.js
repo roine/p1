@@ -208,13 +208,6 @@ feedDataHandler = function(transaction, results) {
 	    }
 };
 
-idDataHandler = function(transaction, results) {
-for (var i=0; i<results.rows.length; i++) {
-	        var row = results.rows.item(i);
-	    }
-	    displayMessage(row)
-};
-
 
 nullDataHandler = dataHandler = function(transaction, results) {
 }
@@ -251,14 +244,6 @@ saveMessageToDB = function(userId, message){
 	});
 };
 
-lastMessage = function(){
-	db.transaction(function (transaction) {
-		transaction.executeSql("SELECT * FROM feeds;", 
-							[],
-		                    idDataHandler, errorHandler);
-	});
-}
-
 
 displayMessage = function(row){
 	// if there is a date defined then the datas come from the local DB
@@ -292,5 +277,15 @@ deleteMessage = function(el, id){
 	// UI process
 	$(el).css({"-moz-transform":"scale(0)", "-webkit-transform":"scale(0)", "-o-transform":"scale(0)", "transform":"scale(0)"});
 	setTimeout(function(){$(el).css("display", "none")}, 500); // 500ms is the transition for scaling
+
 	// database process
+	deleteMessageInDB(id);
+};
+
+deleteMessageInDB = function(id){
+		db.transaction(function (transaction) {
+		transaction.executeSql("DELETE FROM feeds WHERE id=?;", 
+			[id],
+		     nullDataHandler, errorHandler);
+	});
 }
