@@ -104,9 +104,9 @@ $("#form").submit(function(e){
 	userId = $("body").attr("data-userId");
 	if(message.length > 0){
 		if(window.openDatabase) {
-			row = saveMessageToDB(userId, message);
+			saveMessageToDB(userId, message);
 			clearTextarea(el);
-			id = lastMessageId()
+			row = getLastRow()
 			displayMessage(row)
 			tHeight = $("#timeline:last-child").height();
 			$("#timeline:eq(0)").animate({height:tHeight}, "slow");
@@ -134,9 +134,10 @@ $(".udControl .edit").live("click", function(e){
 $(".udControl .delete").live("click", function(e){
 	e.preventDefault();
 	var timeline = $(this).parent().parent().parent();
+	var messageId = $(timeline).attr("data-messageId");
 	var finishHim = confirm("Sure? It's a VERY cool awesome message.");
 	if(finishHim)
-		deleteMessage(timeline);
+		deleteMessage(timeline, messageId);
 })
 
 
@@ -213,7 +214,12 @@ idDataHandler = function(transaction, results) {
 for (var i=0; i<results.rows.length; i++) {
 	        var row = results.rows.item(i);
 	    }
-	    console.log(row)
+};
+lastRowDataHandler = function(transaction, results) {
+for (var i=0; i<results.rows.length; i++) {
+	        var row = results.rows.item(i);
+	    }
+	    displayMessage(row)
 };
 
 
@@ -259,8 +265,23 @@ lastMessageId = function(){
 							[],
 		                    idDataHandler, errorHandler);
 	});
-}
+};
 
+getLastRow = function(){
+	db.transaction(function (transaction) {
+		transaction.executeSql("SELECT * FROM feeds;", 
+			[],
+		    lastRowDataHandler, errorHandler);
+	});
+};
+
+deleteMessageInDB = function(id){
+	db.transaction(function (transaction) {
+		transaction.executeSql("DELETE FROM feeds WHERE id=?;", 
+			[id],
+		    nullDataHandler, errorHandler);
+	});
+};
 
 displayMessage = function(row){
 	// if there is a date defined then the datas come from the local DB
@@ -290,7 +311,11 @@ clearTextarea = function(el){
 }
 
 
-deleteMessage = function(el){
+deleteMessage = function(el, id){
+	// UI process
 	$(el).css({"-moz-transform":"scale(0)", "-webkit-transform":"scale(0)", "-o-transform":"scale(0)", "transform":"scale(0)"});
 	setTimeout(function(){$(el).css("display", "none")}, 500); // 500ms is the transition for scaling
+	
+	// DB process
+	deleteMessageInDB(id)
 }
